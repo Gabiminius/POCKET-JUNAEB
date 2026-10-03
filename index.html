@@ -1,0 +1,1067 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>JUNAEB POS POCKET</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+  
+  <style>
+    /* CSS RESET & NATIVE FULLSCREEN OPTIMIZATION */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+      image-rendering: pixelated;
+    }
+
+    :root {
+      /* Classic Minecraft UI Stone & Iron Palette */
+      --mc-gui-bg: #c6c6c6;
+      --mc-slot-bg: #8b8b8b;
+      --mc-slot-dark: #373737;
+      --mc-highlight: #ffffff;
+      --mc-text-dark: #1b1b1b;
+      --mc-text-dim: #4f4f4f;
+      --mc-accent-blue: #2a4863;
+      --mc-accent-blue-dark: #142433;
+      --mc-accent-green: #386b3b;
+      --mc-accent-red: #782323;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      background-color: var(--mc-gui-bg);
+      color: var(--mc-text-dark);
+      font-family: 'VT323', monospace;
+      font-size: 21px;
+      line-height: 1.1;
+      overflow-x: hidden;
+    }
+
+    /* FULLSCREEN NATIVE APP WRAPPER */
+    .app-screen {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      min-height: 100dvh;
+      width: 100%;
+      max-width: 600px;
+      margin: 0 auto;
+      padding-top: env(safe-area-inset-top, 0px);
+      padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 72px);
+      padding-left: max(10px, env(safe-area-inset-left, 0px));
+      padding-right: max(10px, env(safe-area-inset-right, 0px));
+    }
+
+    /* MINECRAFT GUI INSET / OUTSET BORDERS */
+    .mc-box-inset {
+      background: #8b8b8b;
+      border: 3px solid #373737;
+      border-top-color: #373737;
+      border-left-color: #373737;
+      border-bottom-color: #ffffff;
+      border-right-color: #ffffff;
+      padding: 8px;
+    }
+
+    .mc-box-panel {
+      background: var(--mc-gui-bg);
+      border: 3px solid #ffffff;
+      border-top-color: #ffffff;
+      border-left-color: #ffffff;
+      border-bottom-color: #555555;
+      border-right-color: #555555;
+      box-shadow: 2px 2px 0 #000000;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+
+    /* TOSCO RETRO BUTTONS */
+    .mc-btn {
+      font-family: 'VT323', monospace;
+      font-size: 22px;
+      color: #1b1b1b;
+      background: #c6c6c6;
+      border: 3px solid #ffffff;
+      border-top-color: #ffffff;
+      border-left-color: #ffffff;
+      border-bottom-color: #555555;
+      border-right-color: #555555;
+      box-shadow: 2px 2px 0 #000000;
+      padding: 8px 10px;
+      text-align: center;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      outline: none;
+      line-height: 1;
+      touch-action: manipulation;
+    }
+
+    .mc-btn:active {
+      border: 3px solid #555555;
+      border-top-color: #555555;
+      border-left-color: #555555;
+      border-bottom-color: #ffffff;
+      border-right-color: #ffffff;
+      transform: translate(2px, 2px);
+      box-shadow: 0 0 0 #000000;
+    }
+
+    .mc-btn-blue {
+      background: var(--mc-accent-blue);
+      color: #ffffff;
+      border-color: #436d93;
+      border-bottom-color: var(--mc-accent-blue-dark);
+      border-right-color: var(--mc-accent-blue-dark);
+      text-shadow: 2px 2px 0 #0a131c;
+    }
+    .mc-btn-blue:active {
+      border-color: var(--mc-accent-blue-dark);
+      border-bottom-color: #436d93;
+      border-right-color: #436d93;
+    }
+
+    .mc-btn-sm {
+      padding: 4px 8px;
+      font-size: 19px;
+    }
+
+    /* FULLSCREEN RETRO INPUTS */
+    .mc-input {
+      font-family: 'VT323', monospace;
+      font-size: 24px;
+      color: #000000;
+      background: #ffffff;
+      border: 3px solid #373737;
+      border-top-color: #373737;
+      border-left-color: #373737;
+      border-bottom-color: #c6c6c6;
+      border-right-color: #c6c6c6;
+      padding: 8px 10px;
+      outline: none;
+      width: 100%;
+      border-radius: 0;
+    }
+
+    .mc-input:focus {
+      background: #f7f9fa;
+      border-color: #000000;
+    }
+
+    .mc-input::placeholder {
+      color: #8b8b8b;
+      font-size: 21px;
+    }
+
+    /* HERO BALANCE BOARD */
+    .hero-board {
+      background: #000000;
+      color: #55ff55;
+      border: 3px solid #373737;
+      border-top-color: #373737;
+      border-left-color: #373737;
+      border-bottom-color: #ffffff;
+      border-right-color: #ffffff;
+      padding: 10px;
+      margin-bottom: 12px;
+      box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.9);
+    }
+
+    .hero-num-big {
+      font-size: 50px;
+      line-height: 0.9;
+      color: #ffffff;
+      text-shadow: 3px 3px 0 #373737;
+    }
+
+    /* CONVEYOR LIST ITEM */
+    .conveyor-row {
+      background: #dedede;
+      border: 2px solid #555555;
+      margin-bottom: 6px;
+      padding: 8px 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      cursor: pointer;
+      box-shadow: 1px 1px 0 #000;
+    }
+
+    .conveyor-row.checked {
+      background: #9a9a9a;
+      opacity: 0.65;
+      text-decoration: line-through;
+    }
+
+    .pixel-checkbox {
+      width: 28px;
+      height: 28px;
+      background: #ffffff;
+      border: 3px solid #373737;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+
+    .conveyor-row.checked .pixel-checkbox {
+      background: #2a2a2a;
+      color: #ffffff;
+    }
+
+    /* FIXED BOTTOM THUMB NAVIGATION */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #c6c6c6;
+      border-top: 4px solid #ffffff;
+      box-shadow: 0 -4px 0 #555555;
+      padding: 8px 12px calc(env(safe-area-inset-bottom, 0px) + 8px) 12px;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+      z-index: 50;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .nav-btn {
+      font-size: 21px;
+      padding: 10px 4px;
+    }
+
+    .nav-btn.active {
+      background: #373737;
+      color: #ffffff;
+      border-color: #1b1b1b;
+      box-shadow: none;
+      transform: translate(2px, 2px);
+    }
+
+    /* DIALOG MODAL */
+    .mc-modal-layer {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.7);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      z-index: 100;
+    }
+    .mc-modal-layer.open {
+      display: flex;
+    }
+  </style>
+</head>
+<body>
+
+<div class="app-screen">
+
+  <!-- TOP SYSTEM HEADER -->
+  <header style="display:flex; justify-content:space-between; align-items:center; padding:6px 0 10px 0; border-bottom:3px solid #555555; margin-bottom:10px;">
+    <div>
+      <div style="font-size:24px; font-weight:bold; letter-spacing:1px;">JUNAEB POS POCKET</div>
+      <div style="font-size:16px; color:var(--mc-text-dim);"></div>
+    </div>
+    <div style="display:flex; gap:6px; align-items:center;">
+      <button class="mc-btn mc-btn-sm" id="btn-sound-toggle">SFX:[ON]</button>
+    </div>
+  </header>
+
+  <!-- BALANCE SCOREBOARD -->
+  <div class="hero-board">
+    <div style="display:flex; justify-content:space-between; align-items:flex-end;">
+      <div>
+        <div style="font-size:16px; color:#aaaaaa;">TOTAL GENERAL CARRO:</div>
+        <div class="hero-num-big" id="disp-total-amount">$0</div>
+      </div>
+      <div style="text-align:right;">
+        <div style="font-size:16px; color:#aaaaaa;">CUOTA IDEAL C/U:</div>
+        <div style="font-size:36px; line-height:1; color:#ffffff;" id="disp-target-amount">$0</div>
+      </div>
+    </div>
+    
+    <div style="margin-top:8px; padding-top:6px; border-top:1px dashed #555555; display:flex; justify-content:space-between; font-size:18px;">
+      <span style="color:#aaaaaa;">DIFERENCIA MAXIMA:</span>
+      <span id="disp-gap-amount" style="color:#55ff55;">$0 (PERFECTO)</span>
+    </div>
+  </div>
+
+  <!-- VIEW 1: CARRO (ENTRY & INVENTORY) -->
+  <main id="view-carro">
+    
+    <!-- MANUAL INPUT FORM (NO SHORTCUTS) -->
+    <div class="mc-box-panel">
+      <div style="font-size:20px; margin-bottom:8px; border-bottom:2px solid #555555; padding-bottom:4px; display:flex; justify-content:space-between;">
+        <span>[+] NUEVO PRODUCTO</span>
+        <span style="color:var(--mc-text-dim); font-size:16px;">MANUAL DIRECTO</span>
+      </div>
+
+      <!-- Price & Name -->
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px; margin-bottom:8px;">
+        <div>
+          <label style="font-size:16px; color:var(--mc-text-dim); display:block; margin-bottom:2px;">PRECIO CLP *</label>
+          <input type="number" id="in-price" class="mc-input" placeholder="$0" inputmode="numeric" step="1">
+        </div>
+        <div>
+          <label style="font-size:16px; color:var(--mc-text-dim); display:block; margin-bottom:2px;">NOMBRE (OPCIONAL)</label>
+          <input type="text" id="in-name" class="mc-input" placeholder="PROD #..." maxlength="20" style="text-transform:uppercase;">
+        </div>
+      </div>
+
+      <!-- Quantity & Allocation -->
+      <div style="display:grid; grid-template-columns: 110px 1fr; gap:8px; margin-bottom:10px;">
+        <div>
+          <label style="font-size:16px; color:var(--mc-text-dim); display:block; margin-bottom:2px;">CANTIDAD</label>
+          <div style="display:flex; gap:2px;">
+            <button type="button" class="mc-btn mc-btn-sm" id="btn-qty-minus" style="flex:1;">-</button>
+            <span id="disp-qty" style="display:inline-flex; align-items:center; justify-content:center; width:36px; background:#fff; border:3px solid #373737; font-size:24px;">1</span>
+            <button type="button" class="mc-btn mc-btn-sm" id="btn-qty-plus" style="flex:1;">+</button>
+          </div>
+        </div>
+
+        <div>
+          <label style="font-size:16px; color:var(--mc-text-dim); display:block; margin-bottom:2px;">PAGADOR / ASIGNACION</label>
+          <select id="sel-assignment" class="mc-input" style="padding:6px 4px; font-size:18px;">
+            <option value="auto">[COMPARTIDO (AUTO)]</option>
+          </select>
+        </div>
+      </div>
+
+      <button type="button" class="mc-btn mc-btn-blue" id="btn-add-item" style="width:100%; font-size:26px; padding:12px 6px;">
+        [+] INGRESAR AL CARRO
+      </button>
+    </div>
+
+    <!-- CART HEADER AND COUNTERS -->
+    <div style="display:flex; justify-content:space-between; align-items:center; margin:12px 0 6px 0;">
+      <div style="font-size:20px; font-weight:bold;" id="cart-counter-text">CARRO: 0 PRODUCTOS</div>
+      <button id="btn-clear-cart" style="background:none; border:none; font-family:inherit; font-size:17px; color:var(--mc-accent-red); cursor:pointer; text-decoration:underline;">
+        [VACIAR CARRO]
+      </button>
+    </div>
+
+    <!-- LIST OF PRODUCTS IN CART -->
+    <div id="cart-items-list" style="display:flex; flex-direction:column; gap:6px;">
+      <!-- Dynamic Rows -->
+    </div>
+
+  </main>
+
+  <!-- VIEW 2: CHECKOUT CONVEYOR (EN CAJA) -->
+  <main id="view-caja" style="display:none;">
+
+    <!-- PERSON SELECTOR TABS -->
+    <div id="caja-person-tabs" style="display:flex; gap:6px; overflow-x:auto; margin-bottom:10px; padding-bottom:4px;">
+      <!-- Dynamic Person Tabs -->
+    </div>
+
+    <!-- ACTIVE PERSON CONVEYOR PANEL -->
+    <div class="mc-box-panel" style="border-width:4px;">
+      <div style="display:flex; justify-content:space-between; align-items:flex-end; border-bottom:3px solid #555555; padding-bottom:6px; margin-bottom:8px;">
+        <div>
+          <div style="font-size:16px; color:var(--mc-text-dim);">PASAR POR TARJETA:</div>
+          <div id="caja-person-name" style="font-size:28px; font-weight:bold;">TITULAR</div>
+        </div>
+        <div style="text-align:right;">
+          <div id="caja-person-total" style="font-size:44px; line-height:1; font-weight:bold;">$0</div>
+          <div id="caja-person-diff" style="font-size:17px;">DIF: $0</div>
+        </div>
+      </div>
+
+      <!-- CONVEYOR CHECKLIST -->
+      <div id="caja-person-items" style="display:flex; flex-direction:column; gap:6px; max-height:48vh; overflow-y:auto; padding-right:2px;">
+        <!-- Dynamic checklist -->
+      </div>
+    </div>
+
+    <!-- ACTIONS ROW IN CHECKOUT -->
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
+      <button class="mc-btn mc-btn-blue" id="btn-copy-summary" style="padding:10px; font-size:20px;">
+        [COPIAR RESUMEN]
+      </button>
+      <button class="mc-btn" id="btn-uncheck-all" style="padding:10px; font-size:20px;">
+        [DESMARCAR TODO]
+      </button>
+    </div>
+
+  </main>
+
+  <!-- VIEW 3: ROSTER CONFIG (EQUIPO) -->
+  <main id="view-config" style="display:none;">
+    
+    <div class="mc-box-panel">
+      <div style="font-size:22px; font-weight:bold; margin-bottom:4px;">PERSONAS</div>
+      <div style="font-size:17px; color:var(--mc-text-dim); margin-bottom:12px;">
+        Configura los nombres de quienes pagan. El algoritmo repartirá automáticamente los costos para que la diferencia entre tarjetas sea la mínima posible.
+      </div>
+
+      <div id="people-settings-list" style="display:flex; flex-direction:column; gap:8px; margin-bottom:12px;">
+        <!-- Dynamic person inputs -->
+      </div>
+
+      <button class="mc-btn mc-btn-blue" id="btn-add-roomie" style="width:100%; font-size:22px; margin-bottom:8px; padding:10px;">
+        [+] AGREGAR PERSONA
+      </button>
+
+      <button class="mc-btn" id="btn-reset-people" style="width:100%; font-size:18px; padding:8px;">
+        [RESTAURAR A 2 PERSONAS]
+      </button>
+    </div>
+
+  </main>
+
+</div>
+
+<!-- FIXED BOTTOM THUMB NAVIGATION -->
+<nav class="bottom-nav">
+  <button class="mc-btn nav-btn active" id="nav-btn-carro">[1] CARRO</button>
+  <button class="mc-btn nav-btn" id="nav-btn-caja">[2] EN CAJA</button>
+  <button class="mc-btn nav-btn" id="nav-btn-config">[3] EQUIPO</button>
+</nav>
+
+<!-- MODAL POPUP -->
+<div id="modal-toast" class="mc-modal-layer">
+  <div class="mc-box-panel" style="max-width:320px; width:100%; text-align:center; padding:16px;">
+    <div id="toast-title" style="font-size:24px; font-weight:bold; margin-bottom:6px;">[AVISO]</div>
+    <div id="toast-body" style="font-size:19px; margin-bottom:14px; white-space:pre-wrap; line-height:1.2;"></div>
+    <button class="mc-btn mc-btn-blue" id="toast-btn-ok" style="width:120px; padding:8px; font-size:22px;">[OK]</button>
+  </div>
+</div>
+
+<script>
+  /* NATIVE WEB AUDIO (NO HEAVY LIBRARIES) */
+  let soundEnabled = true;
+  let audioCtx = null;
+
+  function initAudio() {
+    if (!audioCtx) {
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      if (AudioContext) audioCtx = new AudioContext();
+    }
+  }
+
+  function playTone(freq, duration, type = "square") {
+    if (!soundEnabled) return;
+    try {
+      initAudio();
+      if (!audioCtx) return;
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+
+      osc.type = type;
+      osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+
+      gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+
+      osc.start();
+      osc.stop(audioCtx.currentTime + duration);
+    } catch(e) {}
+  }
+
+  function playSound(type) {
+    if (type === 'tap') playTone(880, 0.04);
+    else if (type === 'add') {
+      playTone(660, 0.04);
+      setTimeout(() => playTone(990, 0.05), 45);
+    } else if (type === 'del') playTone(220, 0.08, 'sawtooth');
+    else if (type === 'check') playTone(1200, 0.03);
+  }
+
+  /* FORMAT CLP */
+  const fmtCLP = (v) => "$" + Math.round(Number(v) || 0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+
+  /* PERSISTENT STATE */
+  const STORAGE_KEY = "JUNAEB_POS_NATIVE_DATA";
+
+  const defaultState = {
+    people: [
+      { id: "p1", name: "TU" },
+      { id: "p2", name: "ROOMIE" }
+    ],
+    items: [],
+    counter: 1,
+    checkedUnits: {},
+    activeCajaPersonId: "p1"
+  };
+
+  let state = JSON.parse(JSON.stringify(defaultState));
+
+  function loadState() {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed.people && parsed.items) {
+          state = parsed;
+          if (!state.people.some(p => p.id === state.activeCajaPersonId)) {
+            state.activeCajaPersonId = state.people[0]?.id || "p1";
+          }
+        }
+      }
+    } catch (e) {}
+  }
+
+  function saveState() {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    } catch (e) {}
+  }
+
+  /* PARTITION ALGORITHM (GREEDY LONGEST PROCESSING TIME) */
+  function computePartition() {
+    const people = state.people;
+    if (!people || people.length === 0) return { totals: {}, assignments: {}, maxGap: 0, sum: 0 };
+
+    // Break multi-quantity items into atomic units so they can split across cards
+    const atomicUnits = [];
+    state.items.forEach(it => {
+      const qty = Math.max(1, it.qty || 1);
+      for (let i = 0; i < qty; i++) {
+        atomicUnits.push({
+          unitId: `${it.id}_u${i}`,
+          itemId: it.id,
+          name: qty > 1 ? `${it.name} (${i + 1}/${qty})` : it.name,
+          price: it.price,
+          assigned: it.assigned || "auto"
+        });
+      }
+    });
+
+    const totals = {};
+    const assignments = {};
+    people.forEach(p => {
+      totals[p.id] = 0;
+      assignments[p.id] = [];
+    });
+
+    // 1. Assign locked items first
+    const freePool = [];
+    atomicUnits.forEach(u => {
+      if (u.assigned !== "auto" && totals[u.assigned] !== undefined) {
+        totals[u.assigned] += u.price;
+        assignments[u.assigned].push(u);
+      } else {
+        freePool.push(u);
+      }
+    });
+
+    // 2. Sort remaining shared items from most expensive to cheapest
+    freePool.sort((a, b) => b.price - a.price);
+
+    // 3. Greedily place in the person currently paying the least
+    freePool.forEach(u => {
+      let minPid = people[0].id;
+      let minTotal = totals[minPid];
+      for (let i = 1; i < people.length; i++) {
+        const pid = people[i].id;
+        if (totals[pid] < minTotal) {
+          minTotal = totals[pid];
+          minPid = pid;
+        }
+      }
+      totals[minPid] += u.price;
+      assignments[minPid].push(u);
+    });
+
+    const values = Object.values(totals);
+    const sum = values.reduce((a, b) => a + b, 0);
+    const maxVal = values.length ? Math.max(...values) : 0;
+    const minVal = values.length ? Math.min(...values) : 0;
+    const maxGap = maxVal - minVal;
+
+    return { totals, assignments, maxGap, sum };
+  }
+
+  /* RENDER VIEWS */
+  function renderAll() {
+    const partition = computePartition();
+    renderHero(partition);
+    renderCart();
+    renderCaja(partition);
+    renderSettings();
+    renderAllocationSelect();
+    saveState();
+  }
+
+  function renderHero(partition) {
+    const n = Math.max(1, state.people.length);
+    const target = Math.round(partition.sum / n);
+
+    document.getElementById("disp-total-amount").textContent = fmtCLP(partition.sum);
+    document.getElementById("disp-target-amount").textContent = fmtCLP(target);
+
+    const gapElem = document.getElementById("disp-gap-amount");
+    if (partition.maxGap === 0) {
+      gapElem.textContent = "$0 (PERFECTO)";
+      gapElem.style.color = "#55ff55";
+    } else {
+      gapElem.textContent = `${fmtCLP(partition.maxGap)} (DIF. MAX)`;
+      gapElem.style.color = partition.maxGap < 1000 ? "#ffff55" : "#ff5555";
+    }
+  }
+
+  function renderAllocationSelect() {
+    const sel = document.getElementById("sel-assignment");
+    const prev = sel.value;
+    sel.innerHTML = `<option value="auto">[COMPARTIDO (AUTO)]</option>`;
+    state.people.forEach(p => {
+      const opt = document.createElement("option");
+      opt.value = p.id;
+      opt.textContent = `SOLO ${p.name}`;
+      sel.appendChild(opt);
+    });
+    if (prev && (prev === "auto" || state.people.some(p => p.id === prev))) {
+      sel.value = prev;
+    }
+  }
+
+  function renderCart() {
+    const list = document.getElementById("cart-items-list");
+    list.innerHTML = "";
+
+    const totalQty = state.items.reduce((acc, it) => acc + (it.qty || 1), 0);
+    document.getElementById("cart-counter-text").textContent = `CARRO: ${totalQty} UNID (${state.items.length} ITEMS)`;
+
+    if (state.items.length === 0) {
+      list.innerHTML = `
+        <div class="mc-box-panel" style="text-align:center; padding:24px 10px; color:var(--mc-text-dim); font-size:20px;">
+          CARRO VACIO.<br>INGRESA EL PRECIO ARRIBA Y TOCA [+]
+        </div>
+      `;
+      return;
+    }
+
+    [...state.items].reverse().forEach(it => {
+      const subtotal = it.price * it.qty;
+      const owner = state.people.find(p => p.id === it.assigned);
+      const tag = owner ? `[SOLO ${owner.name}]` : `[COMPARTIDO]`;
+
+      const card = document.createElement("div");
+      card.className = "mc-box-panel";
+      card.style.padding = "8px 10px";
+      card.style.margin = "0";
+
+      card.innerHTML = `
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <div style="flex:1; min-width:0; padding-right:8px;">
+            <div style="font-size:22px; font-weight:bold; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
+              ${escapeHtml(it.name)}
+            </div>
+            <div style="font-size:18px; color:var(--mc-text-dim); display:flex; gap:8px; align-items:center; margin-top:2px;">
+              <span>${fmtCLP(it.price)} x ${it.qty}</span>
+              <button onclick="cycleLock('${it.id}')" style="background:none; border:none; font-family:inherit; font-size:17px; color:var(--mc-accent-blue); text-decoration:underline; cursor:pointer;">
+                ${tag}
+              </button>
+            </div>
+          </div>
+          <div style="display:flex; align-items:center; gap:8px;">
+            <span style="font-size:32px; font-weight:bold; line-height:1;">${fmtCLP(subtotal)}</span>
+            <button onclick="deleteItem('${it.id}')" class="mc-btn mc-btn-sm" style="color:var(--mc-accent-red); padding:4px 8px; font-size:18px;">
+              [X]
+            </button>
+          </div>
+        </div>
+      `;
+      list.appendChild(card);
+    });
+  }
+
+  function renderCaja(partition) {
+    const tabsContainer = document.getElementById("caja-person-tabs");
+    tabsContainer.innerHTML = "";
+
+    if (!state.people.some(p => p.id === state.activeCajaPersonId)) {
+      state.activeCajaPersonId = state.people[0]?.id || "p1";
+    }
+
+    state.people.forEach(p => {
+      const pTot = partition.totals[p.id] || 0;
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = `mc-btn ${p.id === state.activeCajaPersonId ? "mc-btn-blue" : ""}`;
+      btn.style.padding = "8px 12px";
+      btn.style.fontSize = "19px";
+      btn.style.whiteSpace = "nowrap";
+      btn.textContent = `${p.name}: ${fmtCLP(pTot)}`;
+      btn.onclick = () => {
+        state.activeCajaPersonId = p.id;
+        playSound("tap");
+        renderAll();
+      };
+      tabsContainer.appendChild(btn);
+    });
+
+    const activeP = state.people.find(p => p.id === state.activeCajaPersonId) || state.people[0];
+    const pUnits = partition.assignments[activeP.id] || [];
+    const pTotal = partition.totals[activeP.id] || 0;
+    const target = partition.sum / Math.max(1, state.people.length);
+    const diff = pTotal - target;
+
+    document.getElementById("caja-person-name").textContent = activeP.name;
+    document.getElementById("caja-person-total").textContent = fmtCLP(pTotal);
+
+    let diffText = "DIF: $0 (EQUILIBRADO)";
+    if (diff > 0) diffText = `DIF: +${fmtCLP(diff)}`;
+    if (diff < 0) diffText = `DIF: -${fmtCLP(Math.abs(diff))}`;
+    document.getElementById("caja-person-diff").textContent = diffText;
+
+    const list = document.getElementById("caja-person-items");
+    list.innerHTML = "";
+
+    if (pUnits.length === 0) {
+      list.innerHTML = `
+        <div style="text-align:center; padding:24px 10px; font-size:19px; color:var(--mc-text-dim);">
+          SIN PRODUCTOS ASIGNADOS
+        </div>
+      `;
+      return;
+    }
+
+    pUnits.forEach(u => {
+      const isChecked = !!state.checkedUnits[u.unitId];
+      const row = document.createElement("div");
+      row.className = `conveyor-row ${isChecked ? "checked" : ""}`;
+
+      row.innerHTML = `
+        <div onclick="toggleCheck('${u.unitId}')" style="display:flex; align-items:center; gap:8px; flex:1; min-width:0;">
+          <div class="pixel-checkbox">${isChecked ? "[X]" : ""}</div>
+          <div style="font-size:21px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
+            ${escapeHtml(u.name)}
+          </div>
+        </div>
+        <div style="display:flex; align-items:center; gap:6px;">
+          <span style="font-size:28px; font-weight:bold; line-height:1;">${fmtCLP(u.price)}</span>
+          ${state.people.length > 1 ? `
+            <button onclick="transferUnit('${u.unitId}', '${activeP.id}')" class="mc-btn mc-btn-sm" style="padding:4px 8px; font-size:18px;" title="Transferir">
+              [->]
+            </button>
+          ` : ""}
+        </div>
+      `;
+      list.appendChild(row);
+    });
+  }
+
+  function renderSettings() {
+    const container = document.getElementById("people-settings-list");
+    container.innerHTML = "";
+
+    state.people.forEach((p, idx) => {
+      const row = document.createElement("div");
+      row.style.display = "flex";
+      row.style.alignItems = "center";
+      row.style.gap = "6px";
+
+      row.innerHTML = `
+        <span style="font-size:20px; width:28px;">#${idx + 1}</span>
+        <input type="text" class="mc-input" value="${escapeHtml(p.name)}" maxlength="14" style="flex:1; padding:6px 8px; font-size:21px; text-transform:uppercase;" onchange="renamePerson('${p.id}', this.value)">
+        ${state.people.length > 2 ? `
+          <button onclick="removePerson('${p.id}')" class="mc-btn mc-btn-sm" style="color:var(--mc-accent-red); padding:6px 10px;">[DEL]</button>
+        ` : `
+          <button disabled class="mc-btn mc-btn-sm" style="opacity:0.4; padding:6px 10px;">[MIN]</button>
+        `}
+      `;
+      container.appendChild(row);
+    });
+  }
+
+  /* ACTIONS & HANDLERS */
+  let formQty = 1;
+
+  function updateQtyDisp() {
+    document.getElementById("disp-qty").textContent = formQty;
+  }
+
+  function addItem() {
+    const inPrice = document.getElementById("in-price");
+    const inName = document.getElementById("in-name");
+    const selAssign = document.getElementById("sel-assignment");
+
+    const price = parseInt(inPrice.value, 10);
+    if (!price || price <= 0) {
+      playSound("del");
+      inPrice.focus();
+      return;
+    }
+
+    let name = inName.value.trim().toUpperCase();
+    if (!name) {
+      name = `PROD #${state.counter++}`;
+    }
+
+    state.items.push({
+      id: "it_" + Date.now() + "_" + Math.floor(Math.random() * 999),
+      name: name,
+      price: price,
+      qty: formQty,
+      assigned: selAssign.value
+    });
+
+    inPrice.value = "";
+    inName.value = "";
+    formQty = 1;
+    updateQtyDisp();
+    selAssign.value = "auto";
+
+    playSound("add");
+    renderAll();
+    inPrice.focus();
+  }
+
+  function deleteItem(id) {
+    state.items = state.items.filter(it => it.id !== id);
+    playSound("del");
+    renderAll();
+  }
+
+  function cycleLock(id) {
+    const it = state.items.find(x => x.id === id);
+    if (!it) return;
+
+    if (it.assigned === "auto") {
+      it.assigned = state.people[0]?.id || "auto";
+    } else {
+      const idx = state.people.findIndex(p => p.id === it.assigned);
+      if (idx >= 0 && idx < state.people.length - 1) {
+        it.assigned = state.people[idx + 1].id;
+      } else {
+        it.assigned = "auto";
+      }
+    }
+    playSound("tap");
+    renderAll();
+  }
+
+  function toggleCheck(unitId) {
+    state.checkedUnits[unitId] = !state.checkedUnits[unitId];
+    playSound("check");
+    renderAll();
+  }
+
+  function transferUnit(unitId, currentPid) {
+    const idx = state.people.findIndex(p => p.id === currentPid);
+    if (idx === -1) return;
+    const nextPid = state.people[(idx + 1) % state.people.length].id;
+
+    const [itemId] = unitId.split("_u");
+    const it = state.items.find(x => x.id === itemId);
+    if (it) {
+      it.assigned = nextPid;
+      playSound("tap");
+      renderAll();
+    }
+  }
+
+  function renamePerson(id, val) {
+    const clean = val.trim().toUpperCase();
+    if (clean) {
+      const p = state.people.find(x => x.id === id);
+      if (p) p.name = clean;
+      renderAll();
+    }
+  }
+
+  function addPerson() {
+    if (state.people.length >= 6) {
+      showToast("LIMITE", "MAXIMO 6 TITULARES EN SISTEMA.");
+      return;
+    }
+    state.people.push({
+      id: "p_" + Date.now(),
+      name: `PERSONA ${state.people.length + 1}`
+    });
+    playSound("tap");
+    renderAll();
+  }
+
+  function removePerson(id) {
+    if (state.people.length <= 2) return;
+    state.people = state.people.filter(p => p.id !== id);
+    state.items.forEach(it => {
+      if (it.assigned === id) it.assigned = "auto";
+    });
+    if (state.activeCajaPersonId === id) {
+      state.activeCajaPersonId = state.people[0]?.id || "p1";
+    }
+    playSound("del");
+    renderAll();
+  }
+
+  function showToast(title, body) {
+    document.getElementById("toast-title").textContent = `[${title}]`;
+    document.getElementById("toast-body").textContent = body;
+    document.getElementById("modal-toast").classList.add("open");
+  }
+
+  document.getElementById("toast-btn-ok").addEventListener("click", () => {
+    document.getElementById("modal-toast").classList.remove("open");
+    playSound("tap");
+  });
+
+  function copySummary() {
+    const partition = computePartition();
+    let text = `*** CUENTA SUPERMERCADO JUNAEB ***\n`;
+    text += `TOTAL: ${fmtCLP(partition.sum)} CLP\n`;
+    text += `META C/U: ${fmtCLP(Math.round(partition.sum / state.people.length))} CLP\n`;
+    text += `---------------------------------\n`;
+
+    state.people.forEach((p, idx) => {
+      const units = partition.assignments[p.id] || [];
+      const tot = partition.totals[p.id] || 0;
+      text += `\n>> PAGO ${idx + 1}: ${p.name} -> TOTAL: ${fmtCLP(tot)}\n`;
+      units.forEach(u => {
+        text += `- ${u.name}: ${fmtCLP(u.price)}\n`;
+      });
+    });
+
+    text += `\n---------------------------------\n`;
+    text += `Repartido con JUNAEB Pocket POS`;
+
+    const ta = document.createElement("textarea");
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand("copy");
+    document.body.removeChild(ta);
+
+    playSound("add");
+    showToast("COPIADO", "RESUMEN COPIADO AL PORTAPAPELES PARA ENVIAR POR CHAT.");
+  }
+
+  function switchTab(viewId) {
+    const navCarro = document.getElementById("nav-btn-carro");
+    const navCaja = document.getElementById("nav-btn-caja");
+    const navConfig = document.getElementById("nav-btn-config");
+
+    const vCarro = document.getElementById("view-carro");
+    const vCaja = document.getElementById("view-caja");
+    const vConfig = document.getElementById("view-config");
+
+    navCarro.classList.remove("active");
+    navCaja.classList.remove("active");
+    navConfig.classList.remove("active");
+
+    vCarro.style.display = "none";
+    vCaja.style.display = "none";
+    vConfig.style.display = "none";
+
+    playSound("tap");
+
+    if (viewId === "carro") {
+      navCarro.classList.add("active");
+      vCarro.style.display = "block";
+      document.getElementById("in-price").focus();
+    } else if (viewId === "caja") {
+      navCaja.classList.add("active");
+      vCaja.style.display = "block";
+    } else if (viewId === "config") {
+      navConfig.classList.add("active");
+      vConfig.style.display = "block";
+    }
+  }
+
+  function escapeHtml(s) {
+    if (!s) return "";
+    return s.toString()
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;");
+  }
+
+  /* INITIALIZATION */
+  document.addEventListener("DOMContentLoaded", () => {
+    loadState();
+
+    document.getElementById("nav-btn-carro").addEventListener("click", () => switchTab("carro"));
+    document.getElementById("nav-btn-caja").addEventListener("click", () => switchTab("caja"));
+    document.getElementById("nav-btn-config").addEventListener("click", () => switchTab("config"));
+
+    const sfxBtn = document.getElementById("btn-sound-toggle");
+    sfxBtn.addEventListener("click", () => {
+      soundEnabled = !soundEnabled;
+      sfxBtn.textContent = `SFX:[${soundEnabled ? "ON" : "OFF"}]`;
+      if (soundEnabled) playSound("tap");
+    });
+
+    document.getElementById("btn-qty-plus").addEventListener("click", () => {
+      if (formQty < 20) {
+        formQty++;
+        updateQtyDisp();
+        playSound("tap");
+      }
+    });
+
+    document.getElementById("btn-qty-minus").addEventListener("click", () => {
+      if (formQty > 1) {
+        formQty--;
+        updateQtyDisp();
+        playSound("tap");
+      }
+    });
+
+    document.getElementById("btn-add-item").addEventListener("click", addItem);
+    document.getElementById("in-price").addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        addItem();
+      }
+    });
+    document.getElementById("in-name").addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        addItem();
+      }
+    });
+
+    document.getElementById("btn-clear-cart").addEventListener("click", () => {
+      if (state.items.length === 0) return;
+      state.items = [];
+      state.checkedUnits = {};
+      state.counter = 1;
+      playSound("del");
+      renderAll();
+    });
+
+    document.getElementById("btn-add-roomie").addEventListener("click", addPerson);
+    document.getElementById("btn-reset-people").addEventListener("click", () => {
+      state.people = [
+        { id: "p1", name: "TU" },
+        { id: "p2", name: "ROOMIE" }
+      ];
+      state.activeCajaPersonId = "p1";
+      playSound("del");
+      renderAll();
+    });
+
+    document.getElementById("btn-copy-summary").addEventListener("click", copySummary);
+    document.getElementById("btn-uncheck-all").addEventListener("click", () => {
+      state.checkedUnits = {};
+      playSound("del");
+      renderAll();
+    });
+
+    renderAll();
+  });
+</script>
+</body>
+</html>
